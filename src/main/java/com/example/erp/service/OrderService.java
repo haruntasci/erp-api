@@ -2,6 +2,7 @@ package com.example.erp.service;
 
 import com.example.erp.enums.OrderStatus;
 import com.example.erp.exception.NoProductsInStockException;
+import com.example.erp.exception.OrderAlreadyApprovedException;
 import com.example.erp.model.*;
 import com.example.erp.repository.CustomerRepository;
 import com.example.erp.repository.OrderItemRepository;
@@ -60,9 +61,14 @@ public class OrderService {
             OrderItem newOrderItem = orderItemRepository.save(orderItem);
             Order order = orderRepository.findByUuid(request.getOrderUUID());
             order.getOrderItems().add(newOrderItem);
+            if(order.getOrderStatus().equals(OrderStatus.APPROVED)){
+                throw new OrderAlreadyApprovedException("You cannot add OrderItem into an APPROVED Order");
+            }
 
             return orderRepository.save(order);
         } catch (NoProductsInStockException e) {
+            throw new RuntimeException(e);
+        } catch (OrderAlreadyApprovedException e) {
             throw new RuntimeException(e);
         }
 

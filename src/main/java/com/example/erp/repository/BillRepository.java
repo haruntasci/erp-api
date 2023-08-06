@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface BillRepository extends JpaRepository<Bill, Long> {
     Bill findByOrderUuid(UUID uuid);
+
+    Bill findByUuid(UUID uuid);
 }
