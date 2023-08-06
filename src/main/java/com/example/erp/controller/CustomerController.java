@@ -1,6 +1,7 @@
 package com.example.erp.controller;
 
 import com.example.erp.model.Customer;
+import com.example.erp.request.CustomerRequest;
 import com.example.erp.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.createOneCustomer(customer), HttpStatus.OK);
+    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerRequest request) {
+        return new ResponseEntity<>(customerService.createOneCustomer(request), HttpStatus.OK);
     }
 
     @GetMapping
@@ -35,8 +36,8 @@ public class CustomerController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Customer> updateCustomerByUUID(@RequestBody Customer customer, @PathVariable UUID uuid) {
-        return new ResponseEntity<>(customerService.updateCustomerByUUID(customer, uuid), HttpStatus.OK);
+    public ResponseEntity<Customer> updateCustomerByUUID(@RequestBody CustomerRequest request, @PathVariable UUID uuid) {
+        return new ResponseEntity<>(customerService.updateCustomerByUUID(request, uuid), HttpStatus.OK);
     }
 
     @DeleteMapping("/{uuid}")

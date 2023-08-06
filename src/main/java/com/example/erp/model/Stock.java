@@ -14,7 +14,7 @@ import lombok.Data;
 @Table(name = "stocks")
 public class Stock extends Base {
 
-    @Column
+
     @OneToOne
     private Product product;
 

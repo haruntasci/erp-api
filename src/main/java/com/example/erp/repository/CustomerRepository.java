@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Customer findCustomerByNameIgnoreCase(String name);
+    Customer findCustomerByFirstNameIgnoreCase(String name);
 
     Customer findCustomerByUuid(UUID uuid);
 

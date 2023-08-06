@@ -21,10 +21,10 @@ public class BillController {
         this.billService = billService;
     }
 
-    @PostMapping
-    public ResponseEntity<Bill> createBill(BillRequest billRequest) {
-        return new ResponseEntity<>(billService.createOneBill(billRequest), HttpStatus.OK);
-    }
+//    @PostMapping
+//    public ResponseEntity<Bill> createBill(BillRequest billRequest) {
+//        return new ResponseEntity<>(billService.createOneBill(billRequest), HttpStatus.OK);
+//    }
 
     @GetMapping
     public ResponseEntity<List<Bill>> getAllBills() {

@@ -2,6 +2,7 @@ package com.example.erp.service;
 
 import com.example.erp.model.Customer;
 import com.example.erp.repository.CustomerRepository;
+import com.example.erp.request.CustomerRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -17,7 +18,12 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Customer createOneCustomer(Customer customer) {
+    public Customer createOneCustomer(CustomerRequest request) {
+        Customer customer = new Customer();
+        customer.setFirstName(request.getFirstName());
+        customer.setLastName(request.getLastName());
+        customer.setAddress(request.getAddress());
+        customer.setEmail(request.getEmail());
         return customerRepository.save(customer);
     }
 
@@ -26,13 +32,15 @@ public class CustomerService {
     }
 
     public Customer getCustomerByName(String name) {
-        return customerRepository.findCustomerByNameIgnoreCase(name);
+        return customerRepository.findCustomerByFirstNameIgnoreCase(name);
     }
 
-    public Customer updateCustomerByUUID(Customer customer, UUID uuid) {
+    public Customer updateCustomerByUUID(CustomerRequest request, UUID uuid) {
         Customer customerToUpdate = customerRepository.findCustomerByUuid(uuid);
-        customerToUpdate.setName(customer.getName());
-        customerToUpdate.setEmail(customer.getEmail());
+        customerToUpdate.setFirstName(request.getFirstName());
+        customerToUpdate.setLastName(request.getLastName());
+        customerToUpdate.setEmail(request.getEmail());
+        customerToUpdate.setAddress(request.getAddress());
         return customerRepository.save(customerToUpdate);
     }
 

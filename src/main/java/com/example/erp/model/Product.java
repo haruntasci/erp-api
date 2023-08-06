@@ -1,6 +1,5 @@
 package com.example.erp.model;
 
-import com.example.erp.enums.KDVType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +23,8 @@ public class Product extends Base {
     @Column
     private boolean isKDVApplied = false;
 
-    @Column
-    private KDVType kdvType = KDVType.GENERAL_KDV;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "key", name = "key_value_id")
+    private KeyValue KDV;
 
 }

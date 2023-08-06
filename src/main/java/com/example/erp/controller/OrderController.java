@@ -2,6 +2,7 @@ package com.example.erp.controller;
 
 import com.example.erp.enums.OrderStatus;
 import com.example.erp.model.Order;
+import com.example.erp.request.OrderItemRequest;
 import com.example.erp.request.OrderRequest;
 import com.example.erp.request.OrderStatusRequest;
 import com.example.erp.service.OrderService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/order")
@@ -25,6 +27,12 @@ public class OrderController {
         return new ResponseEntity<>(orderService.createOneOrder(orderRequest), HttpStatus.OK);
     }
 
+    @PostMapping("/add-order-item/{uuid}")
+    public ResponseEntity<Order> addOrderItemToOrder(@RequestBody OrderItemRequest orderItemRequest,
+                                                     @PathVariable UUID uuid) {
+        return new ResponseEntity<>(orderService.addOrderItemToOrder(orderItemRequest, uuid), HttpStatus.OK);
+    }
+
     @PostMapping("/change-order-status")
     public ResponseEntity<String> changeOrderStatus(@RequestBody OrderStatusRequest orderStatusRequest) {
         return new ResponseEntity<>(orderService.changeOrderStatus(orderStatusRequest), HttpStatus.OK);
@@ -33,5 +41,10 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         return new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<String> deleteProductByUUID(@PathVariable UUID uuid) {
+        return new ResponseEntity<>(orderService.deleteProductByUUID(uuid), HttpStatus.OK);
     }
 }

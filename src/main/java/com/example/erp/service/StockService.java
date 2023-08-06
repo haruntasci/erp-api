@@ -6,8 +6,10 @@ import com.example.erp.repository.ProductRepository;
 import com.example.erp.repository.StockRepository;
 import com.example.erp.request.StockRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class StockService {
@@ -27,10 +29,23 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
+
     public void changeProductQuantityInStock(Product product, int quantity) {
         Stock stock = stockRepository.findStockByProduct(product);
         stock.setQuantity(stock.getQuantity() - quantity);
         stockRepository.save(stock);
+    }
+    @Transactional
+    public String deleteProductByUUID(UUID uuid) {
+        if (stockRepository.deleteByUuid(uuid) == 1) {
+            return "Delete success";
+        } else {
+            return "Delete error";
+        }
+    }
+
+    public Stock getStockByProduct(Product product) {
+        return stockRepository.findStockByProduct(product);
     }
 
     public List<Stock> getAllStocks() {

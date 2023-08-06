@@ -12,12 +12,18 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "customers")
-public class Customer extends Base{
+public class Customer extends Base {
 
     @Column
-    private String name;
+    private String firstName;
+
+    @Column
+    private String lastName;
 
     @Column
     private String email;
+
+    @Column
+    private String address;
 
 }

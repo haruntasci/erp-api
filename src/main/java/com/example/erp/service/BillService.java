@@ -3,6 +3,7 @@ package com.example.erp.service;
 import com.example.erp.model.Bill;
 import com.example.erp.model.Customer;
 import com.example.erp.model.Order;
+import com.example.erp.model.OrderItem;
 import com.example.erp.repository.BillRepository;
 import com.example.erp.repository.CustomerRepository;
 import com.example.erp.repository.OrderRepository;
@@ -22,12 +23,40 @@ public class BillService {
     }
 
     public Bill createOneBill(BillRequest billRequest) {
+
         Bill bill = new Bill();
         Order order = orderRepository.findById(billRequest.getOrderId()).get();
         bill.setOrder(order);
-        bill.setTotalAmount(order.getQuantity() * order.getOrderPrice());
+        calculateAmounts(order, bill);
         return repository.save(bill);
     }
+
+    private void calculateAmounts(Order order, Bill bill) {
+        double rawAmount = 0;
+        double totalAmount = 0;
+        double kdvAmount = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            if (orderItem.getProduct().isKDVApplied()) {
+                rawAmount += (orderItem.getOrderPrice() / orderItem.getProduct().getKDV().getValue())
+                        * orderItem.getQuantity();
+                totalAmount += orderItem.getOrderPrice() * orderItem.getQuantity();
+            } else {
+                rawAmount += orderItem.getOrderPrice() * orderItem.getQuantity();
+                totalAmount += orderItem.getOrderPrice()
+                        * orderItem.getProduct().getKDV().getValue()
+                        * orderItem.getQuantity();
+            }
+        }
+        rawAmount = (double) Math.round(rawAmount * 100) / 100;
+        totalAmount = (double) Math.round(totalAmount * 100) / 100;
+        kdvAmount = totalAmount - rawAmount;
+        kdvAmount = (double) Math.round(kdvAmount * 100) / 100;
+        bill.setRawAmount(rawAmount);
+        bill.setTotalAmount(totalAmount);
+        bill.setKdvAmount(kdvAmount);
+
+    }
+
 
     public List<Bill> getAllBills() {
         return repository.findAll();

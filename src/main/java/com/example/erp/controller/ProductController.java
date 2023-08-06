@@ -1,6 +1,7 @@
 package com.example.erp.controller;
 
 import com.example.erp.model.Product;
+import com.example.erp.request.ProductRequest;
 import com.example.erp.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
 
-        return new ResponseEntity<>(productService.createOneProduct(product), HttpStatus.OK);
+        return new ResponseEntity<>(productService.createOneProduct(productRequest), HttpStatus.OK);
     }
 
     @GetMapping
@@ -40,8 +41,8 @@ public class ProductController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Product> updateProductByUUID(@RequestBody Product product, @PathVariable UUID uuid) {
-        return new ResponseEntity<>(productService.updateProduct(product, uuid), HttpStatus.OK);
+    public ResponseEntity<Product> updateProductByUUID(@RequestBody ProductRequest request, @PathVariable UUID uuid) {
+        return new ResponseEntity<>(productService.updateProduct(request, uuid), HttpStatus.OK);
     }
 
 

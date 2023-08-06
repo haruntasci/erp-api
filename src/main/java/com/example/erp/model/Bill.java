@@ -14,12 +14,15 @@ import lombok.Data;
 @Table(name = "bills")
 public class Bill extends Base {
 
-    @Column
+
     @ManyToOne
     private Order order;
 
     @Column
-    private long billNumber;//invoice olarak değiştir
+    private double rawAmount;
+
+    @Column
+    private double kdvAmount;
 
     @Column
     private double totalAmount;

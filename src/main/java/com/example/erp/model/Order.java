@@ -3,9 +3,9 @@ package com.example.erp.model;
 import com.example.erp.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @AttributeOverride(
         name = "uuid",
@@ -18,23 +18,15 @@ import java.util.Date;
 @Table(name = "orders")
 public class Order extends Base {
 
-    @Column
     @ManyToOne
     private Customer customer;
 
-    @Column
-    @ManyToOne
-    private Product product;
+    @OneToMany(targetEntity = OrderItem.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(referencedColumnName = "id",name = "order_id")
+    private List<OrderItem> orderItems;
 
     @Column
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.WAITING_FOR_APPROVAL;
-
-    @Column
-    private int quantity;
-
-    @Column
-    private double orderPrice;
-
 
 }
