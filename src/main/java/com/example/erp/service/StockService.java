@@ -5,6 +5,7 @@ import com.example.erp.model.Stock;
 import com.example.erp.repository.ProductRepository;
 import com.example.erp.repository.StockRepository;
 import com.example.erp.request.StockRequest;
+import com.example.erp.request.UpdateStockRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,17 @@ public class StockService {
     }
 
     public Stock createOneStock(StockRequest stockRequest) {
-        Product product = productRepository.findFirstByNameIgnoreCase(stockRequest.getProductName());
+        Product product = productRepository.findProductByUuid(stockRequest.getProductUUID());
         Stock stock = new Stock();
         stock.setProduct(product);
         stock.setQuantity(stockRequest.getQuantity());
         return stockRepository.save(stock);
+    }
+
+    public Stock updateOneStock(UpdateStockRequest updateStockRequest, UUID stockUUID) {
+        Stock stockToUpdate = stockRepository.findByUuid(stockUUID);
+        stockToUpdate.setQuantity(updateStockRequest.getQuantity());
+        return stockRepository.save(stockToUpdate);
     }
 
 
@@ -35,6 +42,7 @@ public class StockService {
         stock.setQuantity(stock.getQuantity() - quantity);
         stockRepository.save(stock);
     }
+
     @Transactional
     public String deleteProductByUUID(UUID uuid) {
         if (stockRepository.deleteByUuid(uuid) == 1) {

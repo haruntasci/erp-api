@@ -18,8 +18,8 @@ public class KeyValueService {
 
     public KeyValue saveKeyValue(String key, double value) {
         KeyValue keyValue = new KeyValue();
-        keyValue.setKey(key);
-        keyValue.setValue(value);
+        keyValue.setKdvName(key);
+        keyValue.setKdvValue(value);
         return keyValueRepository.save(keyValue);
     }
 

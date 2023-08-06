@@ -27,13 +27,12 @@ public class OrderController {
         return new ResponseEntity<>(orderService.createOneOrder(orderRequest), HttpStatus.OK);
     }
 
-    @PostMapping("/add-order-item/{uuid}")
-    public ResponseEntity<Order> addOrderItemToOrder(@RequestBody OrderItemRequest orderItemRequest,
-                                                     @PathVariable UUID uuid) {
-        return new ResponseEntity<>(orderService.addOrderItemToOrder(orderItemRequest, uuid), HttpStatus.OK);
+    @PutMapping("/add-order-item")
+    public ResponseEntity<Order> addOrderItemToOrder(@RequestBody OrderItemRequest orderItemRequest) {
+        return new ResponseEntity<>(orderService.addOrderItemToOrder(orderItemRequest), HttpStatus.OK);
     }
 
-    @PostMapping("/change-order-status")
+    @PutMapping("/change-order-status")
     public ResponseEntity<String> changeOrderStatus(@RequestBody OrderStatusRequest orderStatusRequest) {
         return new ResponseEntity<>(orderService.changeOrderStatus(orderStatusRequest), HttpStatus.OK);
     }

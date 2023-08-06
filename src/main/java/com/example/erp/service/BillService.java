@@ -11,24 +11,30 @@ import com.example.erp.request.BillRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BillService {
-    private final BillRepository repository;
+    private final BillRepository billRepository;
     private final OrderRepository orderRepository;
 
     public BillService(BillRepository repository, OrderRepository orderRepository) {
-        this.repository = repository;
+        this.billRepository = repository;
         this.orderRepository = orderRepository;
     }
 
     public Bill createOneBill(BillRequest billRequest) {
 
         Bill bill = new Bill();
-        Order order = orderRepository.findById(billRequest.getOrderId()).get();
+        Order order = orderRepository.findByUuid(billRequest.getOrderUUID());
         bill.setOrder(order);
         calculateAmounts(order, bill);
-        return repository.save(bill);
+        return billRepository.save(bill);
+    }
+
+    public Bill getBillByOrderUUID(UUID orderUUID) {
+        return billRepository.findByOrderUuid(orderUUID);
     }
 
     private void calculateAmounts(Order order, Bill bill) {
@@ -37,13 +43,13 @@ public class BillService {
         double kdvAmount = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             if (orderItem.getProduct().isKDVApplied()) {
-                rawAmount += (orderItem.getOrderPrice() / orderItem.getProduct().getKDV().getValue())
+                rawAmount += (orderItem.getOrderPrice() / orderItem.getProduct().getKDV().getKdvValue())
                         * orderItem.getQuantity();
                 totalAmount += orderItem.getOrderPrice() * orderItem.getQuantity();
             } else {
                 rawAmount += orderItem.getOrderPrice() * orderItem.getQuantity();
                 totalAmount += orderItem.getOrderPrice()
-                        * orderItem.getProduct().getKDV().getValue()
+                        * orderItem.getProduct().getKDV().getKdvValue()
                         * orderItem.getQuantity();
             }
         }
@@ -59,6 +65,6 @@ public class BillService {
 
 
     public List<Bill> getAllBills() {
-        return repository.findAll();
+        return billRepository.findAll();
     }
 }

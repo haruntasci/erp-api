@@ -10,6 +10,9 @@ import java.util.UUID;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
     Stock findStockByProduct(Product product);
+
+    Stock findByUuid(UUID uuid);
+
     @Modifying
     @Query("DELETE FROM Stock p WHERE p.uuid = ?1")
     int deleteByUuid(UUID uuid);

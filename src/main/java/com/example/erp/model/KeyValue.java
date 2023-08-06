@@ -10,7 +10,7 @@ import lombok.Data;
 public class KeyValue {
     @Column
     @Id
-    private String key;
+    private String kdvName;
     @Column
-    private Double value;
+    private Double kdvValue;
 }

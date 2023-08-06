@@ -24,7 +24,7 @@ public class Product extends Base {
     private boolean isKDVApplied = false;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "key", name = "key_value_id")
+    @JoinColumn(referencedColumnName = "kdvName", name = "key_value_id")
     private KeyValue KDV;
 
 }

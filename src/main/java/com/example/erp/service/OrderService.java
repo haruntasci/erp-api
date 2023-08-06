@@ -40,12 +40,12 @@ public class OrderService {
 
     public Order createOneOrder(OrderRequest orderRequest) {
         Order order = new Order();
-        Customer customer = customerRepository.findCustomerByFirstNameIgnoreCase(orderRequest.getCustomerName());
+        Customer customer = customerRepository.findCustomerByUuid(orderRequest.getCustomerUUID());
         order.setCustomer(customer);
         return orderRepository.save(order);
     }
 
-    public Order addOrderItemToOrder(OrderItemRequest request, UUID orderUUID) {
+    public Order addOrderItemToOrder(OrderItemRequest request) {
         try {
             Product product = productRepository.findFirstByNameIgnoreCase(request.getProductName());
             Stock stock = stockService.getStockByProduct(product);
@@ -58,7 +58,7 @@ public class OrderService {
             orderItem.setQuantity(request.getQuantity());
             orderItem.setProduct(product);
             OrderItem newOrderItem = orderItemRepository.save(orderItem);
-            Order order = orderRepository.findByUuid(orderUUID);
+            Order order = orderRepository.findByUuid(request.getOrderUUID());
             order.getOrderItems().add(newOrderItem);
 
             return orderRepository.save(order);
@@ -73,7 +73,7 @@ public class OrderService {
     }
 
     public String changeOrderStatus(OrderStatusRequest request) {
-        Order order = orderRepository.findById(request.getOrderId()).get();
+        Order order = orderRepository.findByUuid(request.getOrderUUID());
         order.setOrderStatus(request.getStatus());
         Order savedOrder = orderRepository.save(order);
         if (request.getStatus().equals(OrderStatus.APPROVED)) {
@@ -88,7 +88,7 @@ public class OrderService {
 
     private void createBill(OrderStatusRequest request) {
         BillRequest billRequest = new BillRequest();
-        billRequest.setOrderId(request.getOrderId());
+        billRequest.setOrderUUID(request.getOrderUUID());
         billService.createOneBill(billRequest);
     }
 

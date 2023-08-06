@@ -2,6 +2,7 @@ package com.example.erp.controller;
 
 import com.example.erp.model.Stock;
 import com.example.erp.request.StockRequest;
+import com.example.erp.request.UpdateStockRequest;
 import com.example.erp.service.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,16 @@ public class StockController {
         return new ResponseEntity<>(stockService.createOneStock(stock), HttpStatus.OK);
     }
 
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Stock> updateStock(@RequestBody UpdateStockRequest request, @PathVariable UUID uuid) {
+        return new ResponseEntity<>(stockService.updateOneStock(request, uuid), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<Stock>> getAllStocks() {
         return new ResponseEntity<>(stockService.getAllStocks(), HttpStatus.OK);
     }
+
     @DeleteMapping("/{uuid}")
     public ResponseEntity<String> deleteProductByUUID(@PathVariable UUID uuid) {
         return new ResponseEntity<>(stockService.deleteProductByUUID(uuid), HttpStatus.OK);

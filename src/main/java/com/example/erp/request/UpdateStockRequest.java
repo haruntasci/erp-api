@@ -5,7 +5,6 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class StockRequest {
-    private UUID productUUID;
+public class UpdateStockRequest {
     private int quantity;
 }
