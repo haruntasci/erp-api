@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 public class OrderItemRequest {
     private UUID orderUUID;
-    private String productName;
+    private UUID productUUID;
     private int quantity;
 
 }

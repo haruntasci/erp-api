@@ -48,7 +48,7 @@ public class OrderService {
 
     public Order addOrderItemToOrder(OrderItemRequest request) {
         try {
-            Product product = productRepository.findFirstByNameIgnoreCase(request.getProductName());
+            Product product = productRepository.findProductByUuid(request.getProductUUID());
             Stock stock = stockService.getStockByProduct(product);
             if (stock.getQuantity() < request.getQuantity()) {
                 throw new NoProductsInStockException("Number of products in stock: " + stock.getQuantity()
@@ -66,6 +66,7 @@ public class OrderService {
             }
 
             return orderRepository.save(order);
+
         } catch (NoProductsInStockException e) {
             throw new RuntimeException(e);
         } catch (OrderAlreadyApprovedException e) {
